@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/util 
+                        http://www.springframework.org/schema/util/spring-util-3.1.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="byName" default-lazy-init="false">
+
+	<util:properties id="dbProps" location="classpath:db.properties" />
+
+	<bean id="db_active"  class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="#{dbProps['jdbc.driverClassName']}" />
+        <property name="url" value="#{dbProps['jdbc.url']}" />
+        <property name="username" value="#{dbProps['jdbc.username']}" />
+        <property name="password" value="#{dbProps['jdbc.password']}" />
+        <property name="maxActive" value="200"/>
+	</bean>
+
+    <bean id="active_transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="db_active"/>
+    </bean>
+
+    <bean id="db_user" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="#{dbProps['jdbc.driverClassName']}" />
+        <property name="url" value="#{dbProps['user.jdbc.url']}" />
+        <property name="username" value="#{dbProps['user.jdbc.username']}" />
+        <property name="password" value="#{dbProps['user.jdbc.password']}" />
+        <property name="maxActive" value="50"/>
+    </bean>
+
+    <bean id="user_transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="db_user"/>
+    </bean>
+
+    <bean id="db_linkedme" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="#{dbProps['jdbc.driverClassName']}" />
+        <property name="url" value="#{dbProps['jdbc.linkedme_url']}" />
+        <property name="username" value="#{dbProps['jdbc.linkedme_username']}" />
+        <property name="password" value="#{dbProps['jdbc.linkedme_password']}" />
+        <property name="maxActive" value="50"/>
+    </bean>
+
+    <bean id="linkedme_transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="db_linkedme"/>
+    </bean>
+
+    <bean id="db_business" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="#{dbProps['jdbc.driverClassName']}"/>
+        <property name="url" value="#{dbProps['jdbc.url_business']}"/>
+        <property name="username" value="#{dbProps['jdbc.username_business']}"/>
+        <property name="password" value="#{dbProps['jdbc.password_business']}"/>
+        <property name="maxActive" value="50"/>
+    </bean>
+    <bean id="business_transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="db_business"/>
+    </bean>
+
+    <tx:annotation-driven/>
+
+    <bean id="dataSource" class="cc.linkedme.active.ssp.service.datasource.MultipleDataSource">
+        <property name="targetDataSources">
+            <map key-type="cc.linkedme.active.op.common.constants.MultiDataSourceTypeEnum">
+                <entry key="One" value-ref="db_active"/>
+                <entry key="Two" value-ref="db_user"/>
+                <entry key="Three" value-ref="db_linkedme"/>
+                <entry key="Four" value-ref="db_business"/>
+                <!-- 这里还可以加多个dataSource -->
+            </map>
+        </property>
+    </bean>
+</beans>
