@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/JAVA-000.iml" filepath="$PROJECT_DIR$/.idea/JAVA-000.iml" />
+      <module fileurl="file://$PROJECT_DIR$/main/Week_08/sharding-sphere/meta-manager.iml" filepath="$PROJECT_DIR$/main/Week_08/sharding-sphere/meta-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/main/Week_08/sharding-sphere/sharding-sphere.iml" filepath="$PROJECT_DIR$/main/Week_08/sharding-sphere/sharding-sphere.iml" />
     </modules>
   </component>
 </project>

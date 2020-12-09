@@ -6,11 +6,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="meta-manager" />
+        <module name="sharding-sphere" />
         <module name="JAVA-000" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="JAVA-000" target="8" />
+      <module name="meta-manager" target="1.8" />
+      <module name="sharding-sphere" target="8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="meta-manager" options="-parameters" />
+      <module name="sharding-sphere" options="" />
+    </option>
   </component>
 </project>
